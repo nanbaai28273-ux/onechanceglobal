@@ -614,7 +614,6 @@
             updateGlobalTotals();
         }
 
-        let selectedMoney = 100;
         let currentCampaign = campaignsData[0];
 
         function formatUSD(amount) {
@@ -901,7 +900,7 @@
 
 
         
-        // ===== Donation + PayPal Buttons =====
+        // ===== Donation + PayPal (single clean block) =====
         var selectedMoney = 100;
         var donationType = 'onetime';
 
@@ -923,26 +922,29 @@
             selectedMoney = amount;
             var customInput = document.getElementById('custom-money');
             if (customInput) customInput.value = '';
-            document.querySelectorAll('.amt-btn').forEach(function(btn) {
+            var buttons = document.querySelectorAll('.amt-btn');
+            for (var i = 0; i < buttons.length; i++) {
+                var btn = buttons[i];
                 var btnAmount = parseInt(btn.innerText.replace(/[^0-9]/g, ''));
                 if (btnAmount === amount) {
                     btn.className = "amt-btn py-3.5 rounded-xl border-2 border-blue-500 bg-blue-50 text-blue-600 font-semibold text-sm";
                 } else {
                     btn.className = "amt-btn py-3.5 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold text-sm hover:border-blue-500 transition";
                 }
-            });
+            }
             updateAmountDisplay();
-            setTimeout(renderPayPalButtons, 100);
+            setTimeout(renderPayPalButtons, 120);
         }
 
         function customAmountInput() {
             var val = document.getElementById('custom-money').value;
             selectedMoney = (val && parseInt(val) > 0) ? parseInt(val) : 0;
-            document.querySelectorAll('.amt-btn').forEach(function(btn) {
-                btn.className = "amt-btn py-3.5 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold text-sm hover:border-blue-500 transition";
-            });
+            var buttons = document.querySelectorAll('.amt-btn');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].className = "amt-btn py-3.5 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold text-sm hover:border-blue-500 transition";
+            }
             updateAmountDisplay();
-            setTimeout(renderPayPalButtons, 100);
+            setTimeout(renderPayPalButtons, 120);
         }
 
         function updateAmountDisplay() {
@@ -957,7 +959,7 @@
 
             if (typeof paypal === 'undefined') {
                 container.innerHTML = '<p class="text-center text-sm text-gray-500 py-4">Loading PayPal...</p>';
-                setTimeout(renderPayPalButtons, 600);
+                setTimeout(renderPayPalButtons, 700);
                 return;
             }
             if (!selectedMoney || selectedMoney <= 0) {
@@ -991,8 +993,8 @@
 
         window.onload = () => {
             updateAllRaised();
-            if (typeof selectAmount === 'function') selectAmount(100);
-
+            if (typeof selectAmount === "function") selectAmount(100);
+            if (typeof selectAmount === "function") selectAmount(100);
 
             // Top supporters & recent donations
             renderTopSupporters();
